@@ -9,8 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
-#[Route('/produit')]
+
+#[Route('/')]
 class ProduitController extends AbstractController
 {
     #[Route('/', name: 'app_produit_index', methods: ['GET'])]
@@ -51,13 +53,26 @@ class ProduitController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_produit_show', methods: ['GET'])]
+    #[Route('/{id}/show', name: 'app_produit_show', methods: ['GET'])]
     public function show(Produit $produit): Response
     {
         return $this->render('produit/show.html.twig', [
             'produit' => $produit,
         ]);
     }
+
+
+    #[Route('/{id}/showproduit', name: 'app_produit_showfront', methods: ['GET'])]
+    public function showFront(Produit $produit): Response
+    {
+        return $this->render('produit/frontproddetails.html.twig', [
+            'produit' => $produit,
+        ]);
+    }
+    
+
+
+
 
     #[Route('/{id}/edit', name: 'app_produit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Produit $produit, ProduitRepository $produitRepository): Response
@@ -77,14 +92,17 @@ class ProduitController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_produit_delete', methods: ['POST'])]
-    public function delete(Request $request, Produit $produit, ProduitRepository $produitRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
-            $produitRepository->remove($produit, true);
-        }
+    #[Route('/deleteprods/{id}', name: 'supprimerP')]
 
-        return $this->redirectToRoute('app_produit_index', [], Response::HTTP_SEE_OTHER);
+    public function suppPr(ManagerRegistry $doctrine,$id,ProduitRepository $repository)
+    {
+        //récupérer le classroom à supprimer
+        $p= $repository->find($id);
+        //récupérer l'entity manager
+        $em= $doctrine->getManager();
+        $em->remove($p);
+        $em->flush();
+        return $this->redirectToRoute("app_produit_index");
     }
 
 

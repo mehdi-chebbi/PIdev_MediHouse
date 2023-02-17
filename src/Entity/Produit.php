@@ -27,6 +27,7 @@ class Produit
      * @Assert\Length(min=3,
      *     minMessage="Nom doit contenir ou moins 3 lettre")
      */
+    #[ORM\Column]
     private ?string $nomproduit = null;
 
     /**

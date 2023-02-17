@@ -39,6 +39,7 @@
                                             <th>prix</th>
                                             <th>Quantité</th>
                                             <th>Disponibilité</th>
+                                             <th>Image</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
                                         </thead>
@@ -46,24 +47,25 @@
                                         {% for p in produits %}
                                         <tr>
                                             <td >{{ p.nomproduit }}</td>
-                                            <td>{{ p.prix }}</td>
+                                            <td>{{ p.prix }}Dt</td>
                                             <td>{{ p.quantityproduit }}</td>
                                             <td>{{ p.dispoproduit ? 'Yes' : 'No' }}</td>
+                                            <td><img src="{{ asset('/uploads/atachments/'~p.img) }}" class="img-rounded"/></td>
                                             <td class="text-right">
                                                 <div class="actions">
-                                                    <a class="btn btn-sm bg-success-light" data-toggle="modal"
+                                                    <a class="btn btn-sm bg-success-light" 
                                                        href="{{ path('app_produit_edit', {'id': p.id}) }}">
                                                         <i class="fe fe-pencil"></i> Edit
                                                     </a>
-                                                    <a data-toggle="modal" href="{{ path('app_produit_delete', {'id': p.id}) }}"
+                                                
+                                                    <a  href="{{path('supprimerP',{'id':p.id}) }}"
                                                        class="btn btn-sm bg-danger-light">
                                                         <i class="fe fe-trash"></i> Delete
                                                     </a>
+                                                    
                                                 </div>
                                             </td>
-
-                                        </tr>
-
+                                        
                                         {% endfor %}
                                         </tbody>
                                     </table>
